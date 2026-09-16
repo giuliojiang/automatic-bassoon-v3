@@ -1,0 +1,8 @@
+{
+  "name": "automatic-bassoon-v3",
+  "private": true,
+  "scripts": {
+    "rebuild": "node rebuild-manifest.js"
+  },
+  "type": "module"
+}
