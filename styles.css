@@ -133,3 +133,15 @@ html, body {
   pointer-events: none;
   -webkit-user-drag: none;
 }
+.viewer img.page.bump-left { animation: bump-left .3s ease; }
+.viewer img.page.bump-right { animation: bump-right .3s ease; }
+@keyframes bump-left {
+  0% { transform: translateX(0); }
+  35% { transform: translateX(-16px); }
+  100% { transform: translateX(0); }
+}
+@keyframes bump-right {
+  0% { transform: translateX(0); }
+  35% { transform: translateX(16px); }
+  100% { transform: translateX(0); }
+}
