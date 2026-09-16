@@ -266,6 +266,9 @@ function renderViewer(piece) {
       return;
     }
     if (Math.abs(dy) > 60) return; // vertical swipe: ignore
+    // Cancel the synthesized click so the tap can't fall through to the
+    // library underneath (it could land on the search box and pop the keyboard).
+    e.preventDefault();
     tap(t.clientX, t.clientY);
   });
   viewer.addEventListener('click', e => tap(e.clientX, e.clientY));
