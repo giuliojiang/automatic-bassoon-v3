@@ -232,6 +232,8 @@ function renderViewer(piece) {
 
   let showToken = 0;
   async function show(i) {
+    if (i < 0) { bump('right'); return; }
+    if (i > n - 1) { bump('left'); return; }
     const t = ++showToken;
     idx = Math.max(0, Math.min(n - 1, i));
     saveProgress(piece.name, idx);
@@ -247,6 +249,16 @@ function renderViewer(piece) {
   const prev = () => show(idx - 1);
   const next = () => show(idx + 1);
   const back = () => { clearPageBlobs(); renderLibrary(); };
+
+  // Boundary nudge: trying to move past the first/last page nudges the
+  // image toward the edge and springs it back.
+  function bump(dir) {
+    const cls = dir === 'left' ? 'bump-left' : 'bump-right';
+    img.classList.remove('bump-left', 'bump-right');
+    void img.offsetWidth; // restart the animation if it's already playing
+    img.classList.add(cls);
+  }
+  img.addEventListener('animationend', () => img.classList.remove('bump-left', 'bump-right'));
 
   // Kindle-style tap zones: top = exit, bottom-left = back, bottom-right = forward
   let touchStart = null;
