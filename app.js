@@ -55,6 +55,12 @@ function renderPin() {
 
   const dots = document.getElementById('pinDots').children;
   const pad = document.getElementById('pinPad');
+  // WebCrypto needs a secure context; on plain HTTP the PIN can never verify,
+  // so say so instead of shaking on every attempt.
+  if (!window.crypto || !crypto.subtle) {
+    pad.innerHTML = '<div class="pin-insecure">Unlocking needs a secure connection.<br>Please open<br><b>https://m.jstudios.ovh</b></div>';
+    return;
+  }
   const keys = ['1','2','3','4','5','6','7','8','9','C','0','⌫'];
   for (const k of keys) {
     const b = document.createElement('button');
