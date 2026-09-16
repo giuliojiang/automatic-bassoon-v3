@@ -8,7 +8,6 @@ const VAULT_ITERATIONS = 120000;
 const PROBE_URL = 'probe.enc';
 const PROBE_TEXT = 'sheet-vault-probe::ok';
 const PROGRESS_KEY = 'ab2-progress-v1';
-const HINT_KEY = 'ab2-zone-hint-seen';
 
 let manifest = null;
 let keyHandler = null;
@@ -198,23 +197,6 @@ function renderViewer(piece) {
     </div>`;
   const viewer = document.getElementById('viewer');
   const img = document.getElementById('page');
-
-  // First-visit hint for the tap zones
-  let hintSeen = false;
-  try { hintSeen = localStorage.getItem(HINT_KEY) === '1'; } catch {}
-  if (!hintSeen) {
-    const hint = document.createElement('div');
-    hint.className = 'zone-hint';
-    hint.innerHTML = 'Tap <b>top</b> to go back<br>Tap <b>bottom-left</b> for previous page<br>Tap <b>bottom-right</b> for next page';
-    viewer.appendChild(hint);
-    const dismiss = () => {
-      hint.classList.add('fade');
-      setTimeout(() => hint.remove(), 650);
-      try { localStorage.setItem(HINT_KEY, '1'); } catch {}
-    };
-    setTimeout(dismiss, 4000);
-    hint.addEventListener('click', dismiss, { once: true });
-  }
 
   const pageBlobs = new Map();
   const PAGE_BLOB_MAX = 24;
