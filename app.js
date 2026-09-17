@@ -39,8 +39,14 @@ function saveProgress(name, idx) {
 async function deriveVaultKey(pin) {
   const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pin), 'PBKDF2', false, ['deriveKey']);
   return crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt: new TextEncoder().encode(VAULT_SALT), iterations: VAULT_ITERATIONS, hash: 'SHA-256' },
+    { name: 'PBKDF2', salt: hexToBytes(VAULT_SALT), iterations: VAULT_ITERATIONS, hash: 'SHA-256' },
     km, { name: 'AES-GCM', length: 256 }, false, ['decrypt']);
+}
+
+function hexToBytes(hex) {
+  const out = new Uint8Array(hex.length / 2);
+  for (let i = 0; i < out.length; i++) out[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  return out;
 }
 
 function renderPin() {
