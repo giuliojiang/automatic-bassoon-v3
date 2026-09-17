@@ -3,8 +3,8 @@
 
 const app = document.getElementById('app');
 
-const VAULT_SALT = '9b800b1237e39f1765f6713834c43528';
-const VAULT_ITERATIONS = 120000;
+const VAULT_SALT = '880bcbd6b864f3260b1d990dda152e4c';
+const VAULT_ITERATIONS = 20000000;
 const PROBE_URL = 'probe.enc';
 const PROBE_TEXT = 'sheet-vault-probe::ok';
 const PROGRESS_KEY = 'ab2-progress-v1';
@@ -50,6 +50,7 @@ function renderPin() {
     <div class="pin-screen" id="pinScreen">
       <div class="pin-title">Sheet Music</div>
       <div class="pin-dots" id="pinDots">${'<div class="pin-dot"></div>'.repeat(8)}</div>
+      <div class="pin-loading" id="pinLoading" hidden>Loading…</div>
       <div class="pin-pad" id="pinPad"></div>
     </div>`;
 
@@ -84,6 +85,12 @@ function renderPin() {
   async function submit() {
     if (entry.length !== 8 || verifying) return;
     verifying = true;
+    // Show the loading state and let the browser paint it before the
+    // ~1s key derivation blocks the main thread.
+    const loading = document.getElementById('pinLoading');
+    loading.hidden = false;
+    pad.style.visibility = 'hidden';
+    await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     try {
       const key = await deriveVaultKey(entry);
       const res = await fetch(PROBE_URL, { cache: 'no-cache' });
@@ -99,6 +106,8 @@ function renderPin() {
       deny();
     } finally {
       verifying = false;
+      loading.hidden = true;
+      pad.style.visibility = '';
     }
   }
   function press(k) {
