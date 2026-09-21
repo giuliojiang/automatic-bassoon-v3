@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-16T15:40:27.597Z",
+  "generated": "2026-09-21T17:11:48.000Z",
   "pieces": [
     {
       "name": "amusement-park",
@@ -946,6 +946,20 @@
         "RS1-this-is-halloween-4.png.enc",
         "RS1-this-is-halloween-5.png.enc",
         "RS1-this-is-halloween-6.png.enc"
+      ],
+      "audios": []
+    },
+    {
+      "name": "RS1-walk-through-the-fire",
+      "title": "RS1 Walk Through The Fire",
+      "pages": [
+        "RS1-walk-through-the-fire-1.png.enc",
+        "RS1-walk-through-the-fire-2.png.enc",
+        "RS1-walk-through-the-fire-3.png.enc",
+        "RS1-walk-through-the-fire-4.png.enc",
+        "RS1-walk-through-the-fire-5.png.enc",
+        "RS1-walk-through-the-fire-6.png.enc",
+        "RS1-walk-through-the-fire-7.png.enc"
       ],
       "audios": []
     },
