@@ -963,6 +963,16 @@
    "audios": []
   },
   {
+   "name": "RS1-gotta-catch-them-all-2025",
+   "title": "RS1 Gotta Catch Them All (2025 Score)",
+   "pages": [
+    "RS1-gotta-catch-them-all-2025-1.png.enc",
+    "RS1-gotta-catch-them-all-2025-2.png.enc",
+    "RS1-gotta-catch-them-all-2025-3.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-guren-no-yumiya",
    "title": "RS1 Guren No Yumiya",
    "pages": [
@@ -972,6 +982,19 @@
     "RS1-guren-no-yumiya-4.png.enc",
     "RS1-guren-no-yumiya-5.png.enc",
     "RS1-guren-no-yumiya-6.png.enc"
+   ],
+   "audios": []
+  },
+  {
+   "name": "RS1-guren-no-yumiya-original",
+   "title": "RS1 Guren No Yumiya (Original Score)",
+   "pages": [
+    "RS1-guren-no-yumiya-original-1.png.enc",
+    "RS1-guren-no-yumiya-original-2.png.enc",
+    "RS1-guren-no-yumiya-original-3.png.enc",
+    "RS1-guren-no-yumiya-original-4.png.enc",
+    "RS1-guren-no-yumiya-original-5.png.enc",
+    "RS1-guren-no-yumiya-original-6.png.enc"
    ],
    "audios": []
   },
@@ -992,6 +1015,39 @@
     "RS1-halo-theme-tune-11.png.enc",
     "RS1-halo-theme-tune-12.png.enc",
     "RS1-halo-theme-tune-13.png.enc"
+   ],
+   "audios": []
+  },
+  {
+   "name": "RS1-halo-trilogy-full",
+   "title": "RS1 Halo Trilogy (Full Score)",
+   "pages": [
+    "RS1-halo-trilogy-full-1.png.enc",
+    "RS1-halo-trilogy-full-2.png.enc",
+    "RS1-halo-trilogy-full-3.png.enc",
+    "RS1-halo-trilogy-full-4.png.enc",
+    "RS1-halo-trilogy-full-5.png.enc",
+    "RS1-halo-trilogy-full-6.png.enc",
+    "RS1-halo-trilogy-full-7.png.enc",
+    "RS1-halo-trilogy-full-8.png.enc",
+    "RS1-halo-trilogy-full-9.png.enc",
+    "RS1-halo-trilogy-full-10.png.enc",
+    "RS1-halo-trilogy-full-11.png.enc",
+    "RS1-halo-trilogy-full-12.png.enc",
+    "RS1-halo-trilogy-full-13.png.enc",
+    "RS1-halo-trilogy-full-14.png.enc",
+    "RS1-halo-trilogy-full-15.png.enc",
+    "RS1-halo-trilogy-full-16.png.enc",
+    "RS1-halo-trilogy-full-17.png.enc",
+    "RS1-halo-trilogy-full-18.png.enc",
+    "RS1-halo-trilogy-full-19.png.enc",
+    "RS1-halo-trilogy-full-20.png.enc",
+    "RS1-halo-trilogy-full-21.png.enc",
+    "RS1-halo-trilogy-full-22.png.enc",
+    "RS1-halo-trilogy-full-23.png.enc",
+    "RS1-halo-trilogy-full-24.png.enc",
+    "RS1-halo-trilogy-full-25.png.enc",
+    "RS1-halo-trilogy-full-26.png.enc"
    ],
    "audios": []
   },
@@ -1068,6 +1124,17 @@
    "audios": []
   },
   {
+   "name": "RS1-now-we-are-free-choir",
+   "title": "RS1 Now We Are Free (Choir)",
+   "pages": [
+    "RS1-now-we-are-free-choir-1.png.enc",
+    "RS1-now-we-are-free-choir-2.png.enc",
+    "RS1-now-we-are-free-choir-3.png.enc",
+    "RS1-now-we-are-free-choir-4.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-now-we-are-free-gladiator",
    "title": "RS1 Now We Are Free Gladiator",
    "pages": [
@@ -1094,6 +1161,17 @@
    "audios": []
   },
   {
+   "name": "RS1-snake-eater-2025",
+   "title": "RS1 Snake Eater (2025 Score)",
+   "pages": [
+    "RS1-snake-eater-2025-1.png.enc",
+    "RS1-snake-eater-2025-2.png.enc",
+    "RS1-snake-eater-2025-3.png.enc",
+    "RS1-snake-eater-2025-4.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-sonic-boom",
    "title": "RS1 Sonic Boom",
    "pages": [
@@ -1102,6 +1180,18 @@
     "RS1-sonic-boom-3.png.enc",
     "RS1-sonic-boom-4.png.enc",
     "RS1-sonic-boom-5.png.enc"
+   ],
+   "audios": []
+  },
+  {
+   "name": "RS1-sonic-boom-2023",
+   "title": "RS1 Sonic Boom (2023 Version)",
+   "pages": [
+    "RS1-sonic-boom-2023-1.png.enc",
+    "RS1-sonic-boom-2023-2.png.enc",
+    "RS1-sonic-boom-2023-3.png.enc",
+    "RS1-sonic-boom-2023-4.png.enc",
+    "RS1-sonic-boom-2023-5.png.enc"
    ],
    "audios": []
   },
