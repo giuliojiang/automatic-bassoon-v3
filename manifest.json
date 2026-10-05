@@ -973,6 +973,17 @@
    "audios": []
   },
   {
+   "name": "RS1-gravity",
+   "title": "RS1 Gravity",
+   "pages": [
+    "RS1-gravity-1.png.enc",
+    "RS1-gravity-2.png.enc",
+    "RS1-gravity-3.png.enc",
+    "RS1-gravity-4.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-guren-no-yumiya",
    "title": "RS1 Guren No Yumiya",
    "pages": [
