@@ -1183,6 +1183,18 @@
    "audios": []
   },
   {
+   "name": "RS1-snakes",
+   "title": "RS1 Snakes",
+   "pages": [
+    "RS1-snakes-1.png.enc",
+    "RS1-snakes-2.png.enc",
+    "RS1-snakes-3.png.enc",
+    "RS1-snakes-4.png.enc",
+    "RS1-snakes-5.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-sonic-boom",
    "title": "RS1 Sonic Boom",
    "pages": [
