@@ -164,8 +164,15 @@ html, body {
 /* ---------- OFFLINE ---------- */
 .offline { margin-bottom: 16px; }
 .offline-status { color: #8a8a93; font-size: 13px; margin-bottom: 8px; }
-.offline-bar { height: 6px; border-radius: 3px; background: #ececf0; overflow: hidden; margin-bottom: 8px; }
-.offline-fill { height: 100%; width: 0; background: #2e7d32; transition: width .2s; }
-.offline-actions { display: flex; gap: 8px; }
-.offline-actions .qf { flex: none; padding: 10px 16px; }
-.offline-actions .qf:disabled { opacity: .5; }
+.dl-row { margin-top: 8px; }
+.dl-btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 20px;
+  border: 1px solid #e0e0e6;
+  background: #f4f4f6;
+  color: #1a1a1e;
+  cursor: pointer;
+}
+.dl-btn:active { background: #e2e2e8; }
