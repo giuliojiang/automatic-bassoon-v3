@@ -157,6 +157,12 @@ function renderLibrary() {
       <div class="empty" id="empty" style="display:none">No pieces found.</div>
     </div>`;
   document.getElementById('libSub').textContent = manifest.pieces.length + ' pieces';
+  document.getElementById('libSub').insertAdjacentHTML('afterend', `
+      <div class="offline">
+        <div class="offline-status" id="offlineStatus">Checking offline library…</div>
+        <div class="offline-bar" id="offlineBar" hidden><div class="offline-fill" id="offlineFill"></div></div>
+        <div class="offline-actions"><button class="qf" id="offlineBtn" disabled>Download for offline</button></div>
+      </div>`);
   const grid = document.getElementById('grid');
   const empty = document.getElementById('empty');
   const search = document.getElementById('search');
@@ -200,12 +206,162 @@ function renderLibrary() {
   }
   qf.forEach(b => b.addEventListener('click', () => setQuery(b.dataset.q)));
   setQuery(query); // restore persisted filter instead of clearing it
+  initOfflineUI();
   setKeyHandler(null);
+}
+
+
+/* ================= OFFLINE ================= */
+/* Full-library offline support, via the service worker (service-worker.js).
+ * Encrypted pages are cached as-is; decryption still happens in memory
+ * after the PIN, so nothing about the vault changes. The cache is the
+ * source of truth: a page counts as offline only once it is cached. */
+
+const OFFLINE_CACHE = 'sheet-vault-v1';
+let offlineDownload = null; // { cancelled: bool } while a download runs
+
+function allSheetUrls() {
+  const urls = [];
+  for (const p of (manifest.pieces || [])) {
+    for (const f of p.pages) urls.push(sheetUrl(p, f));
+  }
+  return urls;
+}
+
+async function offlineCachedSet() {
+  // Set of cached sheet paths in 'sheets/<piece>/<file>' form, or null
+  // when the Cache API is unavailable.
+  try {
+    if (!('caches' in window)) return null;
+    const cache = await caches.open(OFFLINE_CACHE);
+    const keys = await cache.keys();
+    const out = new Set();
+    for (const r of keys) {
+      const path = new URL(r.url).pathname;
+      const i = path.indexOf('/sheets/');
+      if (i >= 0) out.add(path.slice(i + 1));
+    }
+    return out;
+  } catch { return null; }
+}
+
+async function offlineStatus() {
+  const urls = allSheetUrls();
+  const cached = await offlineCachedSet();
+  if (!cached) return { supported: false, total: urls.length, cached: 0, ready: false };
+  let n = 0;
+  for (const u of urls) if (cached.has(u)) n++;
+  return { supported: true, total: urls.length, cached: n, ready: n === urls.length };
+}
+
+async function downloadOffline(onProgress) {
+  const urls = allSheetUrls();
+  const cached = await offlineCachedSet();
+  const todo = cached ? urls.filter(u => !cached.has(u)) : urls.slice();
+  const state = { cancelled: false };
+  offlineDownload = state;
+  try {
+    if (navigator.storage && navigator.storage.persist) {
+      try { await navigator.storage.persist(); } catch {}
+    }
+  } catch {}
+  let done = 0, failed = 0, bytes = 0;
+  const BATCH = 6;
+  for (let i = 0; i < todo.length && !state.cancelled; i += BATCH) {
+    const results = await Promise.all(todo.slice(i, i + BATCH).map(async u => {
+      try {
+        const res = await fetch(u);
+        if (!res.ok) throw new Error('http ' + res.status);
+        bytes += (await res.arrayBuffer()).byteLength;
+        return true;
+      } catch { return false; }
+    }));
+    for (const ok of results) { if (ok) done++; else failed++; }
+    if (onProgress) onProgress(done, todo.length, failed, bytes);
+  }
+  offlineDownload = null;
+  return { done, failed, cancelled: state.cancelled };
+}
+
+async function removeOffline() {
+  const cache = await caches.open(OFFLINE_CACHE);
+  const keys = await cache.keys();
+  await Promise.all(keys
+    .filter(r => new URL(r.url).pathname.includes('/sheets/'))
+    .map(r => cache.delete(r)));
+}
+
+function initOfflineUI() {
+  const statusEl = document.getElementById('offlineStatus');
+  const barEl = document.getElementById('offlineBar');
+  const fillEl = document.getElementById('offlineFill');
+  const btn = document.getElementById('offlineBtn');
+  if (!statusEl || !btn) return;
+  let mode = 'idle'; // idle | downloading | remove
+  async function refresh() {
+    if (mode === 'downloading') return;
+    if (!('serviceWorker' in navigator) || !('caches' in window)) {
+      statusEl.textContent = 'Offline library is not available in this browser.';
+      btn.disabled = true;
+      return;
+    }
+    if (!navigator.serviceWorker.controller) {
+      statusEl.textContent = 'Offline support is installing — reload the page once, then come back here.';
+      btn.disabled = true;
+      return;
+    }
+    const st = await offlineStatus();
+    const pct = st.total ? Math.round(st.cached / st.total * 100) : 0;
+    fillEl.style.width = pct + '%';
+    barEl.hidden = st.ready;
+    if (st.ready) {
+      statusEl.textContent = 'Offline ready: all ' + st.total + ' pages saved on this device.';
+      btn.textContent = 'Remove offline copy';
+      btn.disabled = false;
+      mode = 'remove';
+    } else {
+      statusEl.textContent = 'Offline: ' + st.cached + ' of ' + st.total + ' pages saved on this device.';
+      btn.textContent = st.cached > 0 ? 'Resume offline download' : 'Download for offline';
+      btn.disabled = false;
+      mode = 'idle';
+    }
+  }
+  btn.addEventListener('click', async () => {
+    if (mode === 'downloading') {
+      if (offlineDownload) offlineDownload.cancelled = true;
+      return;
+    }
+    if (mode === 'remove') {
+      btn.disabled = true;
+      statusEl.textContent = 'Removing offline copy…';
+      await removeOffline();
+      mode = 'idle';
+      await refresh();
+      return;
+    }
+    mode = 'downloading';
+    btn.textContent = 'Cancel download';
+    barEl.hidden = false;
+    await downloadOffline((done, total, failed, bytes) => {
+      const pct = total ? Math.round(done / total * 100) : 0;
+      fillEl.style.width = pct + '%';
+      const mb = (bytes / 1048576).toFixed(0);
+      statusEl.textContent = 'Downloading for offline: ' + done + ' of ' + total + ' pages · ' + mb + ' MB' +
+        (failed ? ' (' + failed + ' failed — tap again to retry)' : '');
+    });
+    mode = 'idle';
+    await refresh();
+  });
+  if ('serviceWorker' in navigator && !navigator.serviceWorker.controller) {
+    navigator.serviceWorker.addEventListener('controllerchange', () => refresh());
+  }
+  refresh();
 }
 
 /* ================= VIEWER ================= */
 
 function renderViewer(piece) {
+  if (offlineDownload) { offlineDownload.cancelled = true; offlineDownload = null; }
   const pages = piece.pages;
   const n = pages.length;
   let idx = 0;

@@ -160,3 +160,12 @@ html, body {
   35% { transform: translateX(16px); }
   100% { transform: translateX(0); }
 }
+
+/* ---------- OFFLINE ---------- */
+.offline { margin-bottom: 16px; }
+.offline-status { color: #8a8a93; font-size: 13px; margin-bottom: 8px; }
+.offline-bar { height: 6px; border-radius: 3px; background: #ececf0; overflow: hidden; margin-bottom: 8px; }
+.offline-fill { height: 100%; width: 0; background: #2e7d32; transition: width .2s; }
+.offline-actions { display: flex; gap: 8px; }
+.offline-actions .qf { flex: none; padding: 10px 16px; }
+.offline-actions .qf:disabled { opacity: .5; }

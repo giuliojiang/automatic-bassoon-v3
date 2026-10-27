@@ -4,11 +4,25 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="theme-color" content="#ffffff">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <title>Sheet Music</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="app.webmanifest">
+  <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
   <div id="app"></div>
   <script src="app.js"></script>
+  <script>
+    // Offline support: the service worker caches the app and, on request,
+    // every encrypted sheet page, so the viewer works with no connection.
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('service-worker.js').catch(function () {});
+      });
+    }
+  </script>
 </body>
 </html>
