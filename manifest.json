@@ -849,6 +849,21 @@
    "audios": []
   },
   {
+   "name": "RS1-a-cruel-angels-thesis",
+   "title": "RS1 A Cruel Angel's Thesis",
+   "pages": [
+    "RS1-a-cruel-angels-thesis-1.png.enc",
+    "RS1-a-cruel-angels-thesis-2.png.enc",
+    "RS1-a-cruel-angels-thesis-3.png.enc",
+    "RS1-a-cruel-angels-thesis-4.png.enc",
+    "RS1-a-cruel-angels-thesis-5.png.enc",
+    "RS1-a-cruel-angels-thesis-6.png.enc",
+    "RS1-a-cruel-angels-thesis-7.png.enc",
+    "RS1-a-cruel-angels-thesis-8.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-a-lyke-wake-dirge",
    "title": "RS1 A Lyke Wake Dirge",
    "pages": [
@@ -1143,6 +1158,20 @@
    "audios": []
   },
   {
+   "name": "RS1-may-it-be",
+   "title": "RS1 May It Be",
+   "pages": [
+    "RS1-may-it-be-1.png.enc",
+    "RS1-may-it-be-2.png.enc",
+    "RS1-may-it-be-3.png.enc",
+    "RS1-may-it-be-4.png.enc",
+    "RS1-may-it-be-5.png.enc",
+    "RS1-may-it-be-6.png.enc",
+    "RS1-may-it-be-7.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-now-we-are-free-choir",
    "title": "RS1 Now We Are Free (Choir)",
    "pages": [
@@ -1227,12 +1256,53 @@
    "audios": []
   },
   {
+   "name": "RS1-still-alive",
+   "title": "RS1 Still Alive",
+   "pages": [
+    "RS1-still-alive-1.png.enc",
+    "RS1-still-alive-2.png.enc",
+    "RS1-still-alive-3.png.enc"
+   ],
+   "audios": []
+  },
+  {
+   "name": "RS1-tetris",
+   "title": "RS1 Tetris (Oi Polna Polna)",
+   "pages": [
+    "RS1-tetris-1.png.enc",
+    "RS1-tetris-2.png.enc",
+    "RS1-tetris-3.png.enc",
+    "RS1-tetris-4.png.enc",
+    "RS1-tetris-5.png.enc",
+    "RS1-tetris-6.png.enc",
+    "RS1-tetris-7.png.enc",
+    "RS1-tetris-8.png.enc",
+    "RS1-tetris-9.png.enc",
+    "RS1-tetris-10.png.enc",
+    "RS1-tetris-11.png.enc",
+    "RS1-tetris-12.png.enc"
+   ],
+   "audios": []
+  },
+  {
    "name": "RS1-the-hanging-tree",
    "title": "RS1 The Hanging Tree",
    "pages": [
     "RS1-the-hanging-tree-1.png.enc",
     "RS1-the-hanging-tree-2.png.enc",
     "RS1-the-hanging-tree-3.png.enc"
+   ],
+   "audios": []
+  },
+  {
+   "name": "RS1-the-poet-and-the-muse",
+   "title": "RS1 The Poet and The Muse",
+   "pages": [
+    "RS1-the-poet-and-the-muse-1.png.enc",
+    "RS1-the-poet-and-the-muse-2.png.enc",
+    "RS1-the-poet-and-the-muse-3.png.enc",
+    "RS1-the-poet-and-the-muse-4.png.enc",
+    "RS1-the-poet-and-the-muse-5.png.enc"
    ],
    "audios": []
   },
