@@ -183,11 +183,13 @@ function renderLibrary() {
           <div class="card-title">${esc(p.title)}</div>
           <div class="card-meta">${p.pages.length} page${p.pages.length === 1 ? '' : 's'}${resume}</div>
           ${p.audios.length ? `<div class="audio-row">${p.audios.map(a =>
-            `<a class="audio-chip" href="${esc(sheetUrl(p, a))}" target="_blank" rel="noopener" data-stop="1">▶ ${esc(a.replace(/\.mp3$/i, ''))}</a>`
+            `<button class="audio-chip" data-stop="1" data-piece="${esc(p.name)}" data-audio="${esc(a)}" data-label="${esc(a.replace(/\.mp3$/i, ''))}">▶ ${esc(a.replace(/\.mp3$/i, ''))}</button>`
           ).join('')}</div>` : ''}
         </div>`;
       card.addEventListener('click', e => {
-        if (e.target.closest('[data-stop]')) return; // audio link: don't open viewer
+        const chip = e.target.closest('.audio-chip');
+        if (chip) { loadAudio(p, chip.dataset.audio); return; } // audio chip: play, don't open viewer
+        if (e.target.closest('[data-stop]')) return; // download button: don't open viewer
         renderViewer(p);
       });
       const dlRow = document.createElement('div');
@@ -218,6 +220,188 @@ function renderLibrary() {
   setQuery(query); // restore persisted filter instead of clearing it
   initOfflineUI();
   setKeyHandler(null);
+  syncPlayerBar(null);
+}
+
+
+/* ================= AUDIO PLAYER ================= */
+/* One persistent player bar, pinned to the top of the screen in both the
+ * library and the viewer. It lives outside #app, so re-rendering a view
+ * never interrupts playback. Audio files are encrypted exactly like sheet
+ * pages (AES-256-GCM, same vault key, "<name>.mp3.enc") and decrypted in
+ * memory; the <audio> element plays from a blob URL, so seeking works.
+ * The service worker already cache-firsts everything under /sheets/,
+ * so a track played once is available offline afterwards. */
+
+let audioEl = null;
+let playerBar = null;
+let playerEls = null; // { toggle, seek, time, title, close }
+let playerTrack = null; // { piece, file, encUrl, blobUrl, title }
+let playerSeeking = false;
+let currentViewerPiece = null;
+let playerDismissed = false; // bar closed during the current viewer session
+const audioBlobs = new Map(); // enc url -> blob url
+
+function fmtTime(s) {
+  if (!isFinite(s) || s == null) return '0:00';
+  s = Math.max(0, Math.floor(s));
+  return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+}
+
+function createPlayerBar() {
+  const bar = document.createElement('div');
+  bar.id = 'playerBar';
+  bar.className = 'player-bar';
+  bar.hidden = true;
+  bar.innerHTML = `
+    <div class="player-title" id="playerTitle"></div>
+    <div class="player-row">
+      <button class="player-btn" id="playerToggle" aria-label="Play or pause">▶</button>
+      <input class="player-seek" id="playerSeek" type="range" min="0" max="1000" value="0" step="1" aria-label="Seek">
+      <span class="player-time" id="playerTime">0:00 / 0:00</span>
+      <button class="player-btn ghost" id="playerClose" aria-label="Stop and close">✕</button>
+    </div>`;
+  document.body.appendChild(bar);
+  playerBar = bar;
+  playerEls = {
+    toggle: bar.querySelector('#playerToggle'),
+    seek: bar.querySelector('#playerSeek'),
+    time: bar.querySelector('#playerTime'),
+    title: bar.querySelector('#playerTitle'),
+    close: bar.querySelector('#playerClose'),
+  };
+
+  audioEl = new Audio();
+  audioEl.preload = 'metadata';
+  audioEl.addEventListener('loadedmetadata', updatePlayerUi);
+  audioEl.addEventListener('timeupdate', updatePlayerUi);
+  audioEl.addEventListener('play', () => { playerEls.toggle.textContent = '❚❚'; markPlayingChip(); });
+  audioEl.addEventListener('pause', () => { playerEls.toggle.textContent = '▶'; markPlayingChip(); });
+  audioEl.addEventListener('ended', () => { playerEls.toggle.textContent = '▶'; markPlayingChip(); });
+
+  playerEls.toggle.addEventListener('click', onPlayerToggle);
+  playerEls.close.addEventListener('click', stopPlayer);
+  playerEls.seek.addEventListener('pointerdown', () => { playerSeeking = true; });
+  playerEls.seek.addEventListener('input', () => {
+    if (audioEl.duration) audioEl.currentTime = (playerEls.seek.value / 1000) * audioEl.duration;
+    updatePlayerUi();
+  });
+  playerEls.seek.addEventListener('change', () => { playerSeeking = false; });
+  playerEls.seek.addEventListener('pointerup', () => { playerSeeking = false; });
+}
+
+function updatePlayerUi() {
+  if (!playerEls || !playerTrack) return;
+  const d = audioEl.duration || 0;
+  const c = audioEl.currentTime || 0;
+  playerEls.time.textContent = fmtTime(c) + ' / ' + fmtTime(d);
+  if (!playerSeeking && d > 0) {
+    const v = Math.round((c / d) * 1000);
+    playerEls.seek.value = v;
+    playerEls.seek.style.background =
+      'linear-gradient(90deg, #1a1a1e ' + (v / 10) + '%, #e0e0e6 ' + (v / 10) + '%)';
+  }
+}
+
+function showPlayerBar() {
+  playerBar.hidden = false;
+  document.body.classList.add('has-player');
+}
+function hidePlayerBar() {
+  playerBar.hidden = true;
+  document.body.classList.remove('has-player');
+}
+
+function syncPlayerBar(piece) {
+  if (playerTrack) {
+    // A track is loaded: the bar stays up in both views.
+    playerEls.title.textContent = playerTrack.title;
+    playerEls.toggle.textContent = audioEl.paused ? '▶' : '❚❚';
+    showPlayerBar();
+    updatePlayerUi();
+    return;
+  }
+  if (piece && piece.audios.length && !playerDismissed) {
+    // Viewer for a piece with audio, nothing loaded yet: offer to play it.
+    playerEls.title.textContent = piece.title + ' — ' + piece.audios[0].replace(/\.mp3$/i, '');
+    playerEls.toggle.textContent = '▶';
+    playerEls.time.textContent = 'Tap ▶ to play';
+    playerEls.seek.value = 0;
+    playerEls.seek.style.background = '#e0e0e6';
+    showPlayerBar();
+    return;
+  }
+  hidePlayerBar();
+}
+
+async function onPlayerToggle() {
+  // No track loaded: in the viewer, the toggle loads this piece's audio.
+  if (!playerTrack) {
+    if (currentViewerPiece && currentViewerPiece.audios.length) {
+      await loadAudio(currentViewerPiece, currentViewerPiece.audios[0]);
+    }
+    return;
+  }
+  if (audioEl.paused) { try { await audioEl.play(); } catch {} }
+  else audioEl.pause();
+}
+
+async function loadAudio(piece, file) {
+  if (!vaultKey) return;
+  const encUrl = sheetUrl(piece, file) + '.enc';
+  const label = file.replace(/\.mp3$/i, '');
+  // Tapping the loaded track's chip toggles play/pause.
+  if (playerTrack && playerTrack.encUrl === encUrl) { onPlayerToggle(); return; }
+  playerTrack = null;
+  audioEl.pause();
+  playerDismissed = false;
+  showPlayerBar();
+  playerEls.title.textContent = piece.title + ' — ' + label;
+  playerEls.toggle.textContent = '▶';
+  playerEls.time.textContent = 'Loading…';
+  playerEls.seek.value = 0;
+  playerEls.seek.style.background = '#e0e0e6';
+  try {
+    let blobUrl = audioBlobs.get(encUrl);
+    if (!blobUrl) {
+      const res = await fetch(encUrl, { cache: 'force-cache' });
+      if (!res.ok) throw new Error('fetch failed: ' + res.status);
+      const buf = new Uint8Array(await res.arrayBuffer());
+      const pt = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv: buf.slice(0, 12) }, vaultKey, buf.slice(12));
+      blobUrl = URL.createObjectURL(new Blob([pt], { type: 'audio/mpeg' }));
+      audioBlobs.set(encUrl, blobUrl);
+    }
+    playerTrack = { piece, file, encUrl, blobUrl, title: piece.title + ' — ' + label };
+    audioEl.src = blobUrl;
+    markPlayingChip();
+    try { await audioEl.play(); } catch {
+      // Some browsers only allow play() from a direct tap: the bar now
+      // shows ▶, so one more tap starts it.
+    }
+  } catch (e) {
+    playerEls.title.textContent = 'Could not load audio — ' + label;
+    playerEls.time.textContent = '0:00 / 0:00';
+  }
+}
+
+function stopPlayer() {
+  audioEl.pause();
+  audioEl.removeAttribute('src');
+  audioEl.load();
+  playerTrack = null;
+  markPlayingChip();
+  playerDismissed = true;
+  syncPlayerBar(currentViewerPiece);
+}
+
+function markPlayingChip() {
+  document.querySelectorAll('.audio-chip').forEach(chip => {
+    const isCurrent = !!(playerTrack && !audioEl.paused &&
+      chip.dataset.piece === playerTrack.piece.name && chip.dataset.audio === playerTrack.file);
+    chip.classList.toggle('playing', isCurrent);
+    chip.textContent = (isCurrent ? '❚❚ ' : '▶ ') + chip.dataset.label;
+  });
 }
 
 
@@ -351,6 +535,8 @@ function initOfflineUI() {
 /* ================= VIEWER ================= */
 
 function renderViewer(piece) {
+  currentViewerPiece = piece;
+  playerDismissed = false;
   const pages = piece.pages;
   const n = pages.length;
   let idx = 0;
@@ -414,7 +600,7 @@ function renderViewer(piece) {
 
   const prev = () => show(idx - 1);
   const next = () => show(idx + 1);
-  const back = () => { clearPageBlobs(); renderLibrary(); };
+  const back = () => { currentViewerPiece = null; clearPageBlobs(); renderLibrary(); };
 
   // Boundary nudge: trying to move past the first/last page nudges the
   // image toward the edge and springs it back.
@@ -479,11 +665,13 @@ function renderViewer(piece) {
   });
 
   show(idx);
+  syncPlayerBar(piece);
 }
 
 /* ================= BOOT ================= */
 
 (async function boot() {
+  createPlayerBar();
   try {
     const res = await fetch('manifest.json', { cache: 'no-cache' });
     manifest = await res.json();
