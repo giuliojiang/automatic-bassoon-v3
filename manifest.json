@@ -861,7 +861,10 @@
     "RS1-a-cruel-angels-thesis-7.png.enc",
     "RS1-a-cruel-angels-thesis-8.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor1.mp3",
+    "tenor2.mp3"
+   ]
   },
   {
    "name": "RS1-a-lyke-wake-dirge",
@@ -968,7 +971,10 @@
     "RS1-down-by-the-river-3.png.enc",
     "RS1-down-by-the-river-4.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor1.mp3",
+    "tenor2.mp3"
+   ]
   },
   {
    "name": "RS1-dragonborn",
@@ -1199,7 +1205,9 @@
     "RS1-jump-up-superstar-10.png.enc",
     "RS1-jump-up-superstar-11.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-kamado-tanjiro-no-uta",
@@ -1323,7 +1331,9 @@
     "RS1-may-it-be-6.png.enc",
     "RS1-may-it-be-7.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-misty-mountains",
@@ -1585,7 +1595,9 @@
     "RS1-still-alive-2.png.enc",
     "RS1-still-alive-3.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-tetris",
@@ -1604,7 +1616,9 @@
     "RS1-tetris-11.png.enc",
     "RS1-tetris-12.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-the-dawn-will-come",
@@ -1698,7 +1712,9 @@
     "RS1-the-world-is-gonna-end-tonight-3.png.enc",
     "RS1-the-world-is-gonna-end-tonight-4.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-this-is-halloween",
