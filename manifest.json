@@ -1000,7 +1000,10 @@
     "RS1-duel-of-the-fates-3.png.enc",
     "RS1-duel-of-the-fates-4.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor1.mp3",
+    "tenor2.mp3"
+   ]
   },
   {
    "name": "RS1-galaxy-song",
@@ -1012,7 +1015,9 @@
     "RS1-galaxy-song-4.png.enc",
     "RS1-galaxy-song-5.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-golden",
@@ -1044,7 +1049,9 @@
     "RS1-gotta-catch-them-all-3.png.enc",
     "RS1-gotta-catch-them-all-4.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-gotta-catch-them-all-2025",
@@ -1154,7 +1161,9 @@
     "RS1-im-the-x-2.png.enc",
     "RS1-im-the-x-3.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-in-the-blood",
@@ -1295,7 +1304,10 @@
     "RS1-lord-of-the-rings-medley-7.png.enc",
     "RS1-lord-of-the-rings-medley-8.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor1-last-note-g.mp3",
+    "tenor1-last-note-f.mp3"
+   ]
   },
   {
    "name": "RS1-lullaby-of-woe",
@@ -1344,7 +1356,9 @@
     "RS1-misty-mountains-3.png.enc",
     "RS1-misty-mountains-4.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-moonlight-guide-us",
@@ -1372,7 +1386,9 @@
     "RS1-muppet-christmas-carol-medley-10.png.enc",
     "RS1-muppet-christmas-carol-medley-11.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-my-sails-are-set",
@@ -1404,7 +1420,9 @@
     "RS1-now-we-are-free-choir-3.png.enc",
     "RS1-now-we-are-free-choir-4.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-now-we-are-free-gladiator",
@@ -1561,7 +1579,10 @@
     "RS1-somewhere-in-my-memory-8.png.enc",
     "RS1-somewhere-in-my-memory-9.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor1.mp3",
+    "tenor2.mp3"
+   ]
   },
   {
    "name": "RS1-sonic-boom",
@@ -1689,7 +1710,10 @@
     "RS1-the-lion-king-medley-16.png.enc",
     "RS1-the-lion-king-medley-17.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor1.mp3",
+    "tenor2.mp3"
+   ]
   },
   {
    "name": "RS1-the-poet-and-the-muse",
@@ -1761,7 +1785,10 @@
     "RS1-walk-through-the-fire-6.png.enc",
     "RS1-walk-through-the-fire-7.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor1.mp3",
+    "tenor2.mp3"
+   ]
   },
   {
    "name": "RS1-warbringers-jaina",
@@ -1807,7 +1834,9 @@
     "RS1-where-my-heart-will-take-me-5.png.enc",
     "RS1-where-my-heart-will-take-me-6.png.enc"
    ],
-   "audios": []
+   "audios": [
+    "tenor.mp3"
+   ]
   },
   {
    "name": "RS1-youre-welcome",
